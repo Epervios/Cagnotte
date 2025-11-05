@@ -560,6 +560,7 @@ async def startup_event():
             "email": admin_email,
             "password": hash_password("admin123"),
             "actif": True,
+            "mois_debut": datetime.now(timezone.utc).strftime("%Y-%m"),
             "created_at": datetime.now(timezone.utc).isoformat()
         }
         await db.participants.insert_one(admin_data)
