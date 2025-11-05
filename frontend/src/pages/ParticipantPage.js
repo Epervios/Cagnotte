@@ -180,6 +180,25 @@ function ParticipantPage() {
     return !hasPayment;
   };
 
+  // Get month status for timeline
+  const getMonthStatus = (year, month) => {
+    const moisStr = `${year}-${String(month).padStart(2, '0')}`;
+    const now = new Date();
+    const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+    
+    const paiement = paiements.find(p => p.mois === moisStr);
+    
+    if (moisStr > currentMonth) {
+      return { status: 'future', color: 'bg-gray-200', label: 'Futur' };
+    } else if (paiement?.statut === 'confirme') {
+      return { status: 'confirme', color: 'bg-green-500', label: 'Confirmé' };
+    } else if (paiement?.statut === 'en_attente') {
+      return { status: 'en_attente', color: 'bg-yellow-500', label: 'En attente' };
+    } else {
+      return { status: 'en_retard', color: 'bg-red-500', label: 'Manquant' };
+    }
+  };
+
   const years = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - i);
 
   if (!user) return null;
