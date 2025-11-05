@@ -63,6 +63,39 @@ body {
   background: #262626;
 }
 
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.5rem !important;
+  }
+  
+  .card {
+    padding: 16px;
+  }
+  
+  table {
+    font-size: 12px;
+  }
+  
+  table th,
+  table td {
+    padding: 8px 4px;
+  }
+  
+  /* Scrollable timeline on mobile */
+  .grid-cols-12 {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 8px;
+  }
+  
+  .grid-cols-12 > div {
+    min-width: 60px;
+    flex-shrink: 0;
+  }
+}
+
 .App {
   min-height: 100vh;
 }
