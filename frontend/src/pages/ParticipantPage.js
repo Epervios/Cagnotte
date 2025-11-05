@@ -33,6 +33,9 @@ function ParticipantPage() {
   const [showChangePassword, setShowChangePassword] = useState(false);
   const [passwordForm, setPasswordForm] = useState({ current_password: '', new_password: '', confirm_password: '' });
   
+  // Timeline
+  const [timelineYear, setTimelineYear] = useState(new Date().getFullYear());
+  
   const navigate = useNavigate();
 
   useEffect(() => {
