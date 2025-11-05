@@ -259,6 +259,15 @@ function ParticipantPage() {
                 </DialogContent>
               </Dialog>
             )}
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={toggleTheme}
+              title={theme === 'dark' ? 'Mode clair' : 'Mode sombre'}
+              data-testid="theme-toggle"
+            >
+              {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </Button>
             {isAdmin && (
               <Button
                 onClick={() => navigate('/admin')}
