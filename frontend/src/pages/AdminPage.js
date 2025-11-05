@@ -85,7 +85,7 @@ function AdminPage() {
       await axios.post(`${API}/participants`, newParticipant);
       toast.success('Participant ajouté');
       setShowAddParticipant(false);
-      setNewParticipant({ nom: '', email: '', password: '' });
+      setNewParticipant({ nom: '', email: '', password: '', mois_debut: '' });
       loadData();
     } catch (error) {
       toast.error(error.response?.data?.detail || 'Erreur');
