@@ -514,10 +514,38 @@ function AdminPage() {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="egale">Parts égales</SelectItem>
-                          <SelectItem value="ponderee">Pondérée (prochainement)</SelectItem>
+                          <SelectItem value="ponderee">Répartition pondérée</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
+                    
+                    {depenseForm.repartition === 'ponderee' && (
+                      <div className="space-y-2">
+                        <Label>Poids par participant</Label>
+                        <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto border rounded-lg p-3">
+                          {depenseForm.participants.map(pid => {
+                            const participant = participants.find(p => p.id === pid);
+                            return (
+                              <div key={pid} className="flex items-center gap-2">
+                                <Label className="text-sm flex-1">{participant?.nom}</Label>
+                                <Input
+                                  type="number"
+                                  step="0.1"
+                                  min="0"
+                                  value={depenseForm.poids[pid] || 1}
+                                  onChange={(e) => setDepenseForm(prev => ({
+                                    ...prev,
+                                    poids: { ...prev.poids, [pid]: parseFloat(e.target.value) || 1 }
+                                  }))}
+                                  className="w-20"
+                                  placeholder="1"
+                                />
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
                     
                     <Button type="submit" className="w-full" disabled={loading} data-testid="submit-depense-button">
                       {loading ? 'Création...' : 'Créer Dépense'}
