@@ -783,6 +783,7 @@ function AdminPage() {
                   <tr>
                     <th>Nom</th>
                     <th>Email</th>
+                    <th>Mois début</th>
                     <th>Statut</th>
                     <th>Actions</th>
                   </tr>
@@ -792,6 +793,7 @@ function AdminPage() {
                     <tr key={p.id} data-testid={`participant-row-${p.id}`}>
                       <td>{p.nom}</td>
                       <td>{p.email}</td>
+                      <td>{p.mois_debut || '-'}</td>
                       <td>
                         <Badge className={p.actif ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}>
                           {p.actif ? 'Actif' : 'Inactif'}
