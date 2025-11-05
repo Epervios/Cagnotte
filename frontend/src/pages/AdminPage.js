@@ -95,14 +95,41 @@ function AdminPage() {
   };
 
   const handleDeleteParticipant = async (id) => {
-    if (!window.confirm('Désactiver ce participant ?')) return;
+    if (!window.confirm('Désactiver ce participant ? Cette action est irréversible.')) return;
     
     try {
       await axios.delete(`${API}/participants/${id}`);
       toast.success('Participant désactivé');
       loadData();
     } catch (error) {
-      toast.error('Erreur');
+      toast.error(error.response?.data?.detail || 'Erreur lors de la désactivation');
+    }
+  };
+
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+    
+    if (passwordForm.new_password !== passwordForm.confirm_password) {
+      toast.error('Les mots de passe ne correspondent pas');
+      return;
+    }
+    
+    if (passwordForm.new_password.length < 6) {
+      toast.error('Le mot de passe doit contenir au moins 6 caractères');
+      return;
+    }
+    
+    try {
+      await axios.put(`${API}/participants/${user.id}/password`, {
+        current_password: passwordForm.current_password,
+        new_password: passwordForm.new_password
+      });
+      
+      toast.success('Mot de passe modifié avec succès');
+      setShowChangePassword(false);
+      setPasswordForm({ current_password: '', new_password: '', confirm_password: '' });
+    } catch (error) {
+      toast.error(error.response?.data?.detail || 'Erreur lors de la modification');
     }
   };
 
