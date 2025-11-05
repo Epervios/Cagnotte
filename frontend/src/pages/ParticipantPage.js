@@ -233,14 +233,29 @@ function ParticipantPage() {
           </div>
           <div className="flex gap-2 flex-wrap items-center">
             {notifications.length > 0 && (
-              <div className="relative">
-                <Button variant="outline" size="icon" className="relative">
-                  <Bell className="w-4 h-4" />
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                    {notifications.length}
-                  </span>
-                </Button>
-              </div>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="outline" size="icon" className="relative" data-testid="notifications-button">
+                    <Bell className="w-4 h-4" />
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                      {notifications.length}
+                    </span>
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Notifications</DialogTitle>
+                    <DialogDescription>Messages importants concernant vos paiements</DialogDescription>
+                  </DialogHeader>
+                  <div className="space-y-3">
+                    {notifications.map((notif, index) => (
+                      <div key={index} className="p-3 bg-yellow-50 border-l-4 border-yellow-500 rounded">
+                        <p className="text-sm text-gray-700">{notif}</p>
+                      </div>
+                    ))}
+                  </div>
+                </DialogContent>
+              </Dialog>
             )}
             {isAdmin && (
               <Button
