@@ -166,11 +166,15 @@ function ParticipantPage() {
     return true;
   });
   
-  // Check if in retard
-  const isEnRetard = (paiement) => {
+  // Check if in retard - only if no payment at all for a past month
+  const isEnRetard = (mois) => {
     const now = new Date();
     const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-    return paiement.mois < currentMonth && paiement.statut !== 'confirme';
+    if (mois >= currentMonth) return false;
+    
+    // Check if any payment exists for this month (confirmed or pending)
+    const hasPayment = paiements.some(p => p.mois === mois);
+    return !hasPayment;
   };
 
   const years = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - i);
