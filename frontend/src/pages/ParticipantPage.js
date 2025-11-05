@@ -204,7 +204,7 @@ function ParticipantPage() {
     // Check if before user's start month
     const userMoisDebut = user?.mois_debut || `${year}-01`;
     if (moisStr < userMoisDebut) {
-      return { status: 'not_started', color: 'bg-gray-100', label: 'Non concerné', hidden: true };
+      return { status: 'not_started', color: 'bg-gray-700', label: 'Pas cotisé' };
     }
     
     const paiement = paiements.find(p => p.mois === moisStr);
@@ -216,7 +216,7 @@ function ParticipantPage() {
     } else if (paiement?.statut === 'en_attente') {
       return { status: 'en_attente', color: 'bg-yellow-500', label: 'En attente' };
     } else {
-      return { status: 'en_retard', color: 'bg-red-500', label: 'Manquant' };
+      return { status: 'en_retard', color: 'bg-red-500', label: 'En retard' };
     }
   };
 
