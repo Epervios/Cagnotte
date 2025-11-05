@@ -225,7 +225,17 @@ function ParticipantPage() {
             <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">Cagnotte Cadre SIC</h1>
             <p className="text-gray-600 mt-1">Bienvenue, {user.nom}</p>
           </div>
-          <div className="flex gap-2 flex-wrap">
+          <div className="flex gap-2 flex-wrap items-center">
+            {notifications.length > 0 && (
+              <div className="relative">
+                <Button variant="outline" size="icon" className="relative">
+                  <Bell className="w-4 h-4" />
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {notifications.length}
+                  </span>
+                </Button>
+              </div>
+            )}
             {isAdmin && (
               <Button
                 onClick={() => navigate('/admin')}
