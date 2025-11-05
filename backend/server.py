@@ -223,7 +223,7 @@ async def create_participant(participant: UserCreate, _: Dict[str, Any] = Depend
 
 @api_router.put("/participants/{participant_id}", response_model=User)
 async def update_participant(participant_id: str, update: UserCreate, _: Dict[str, Any] = Depends(require_admin)):
-    update_data = {"nom": update.nom, "email": update.email, "actif": update.actif}
+    update_data = {"nom": update.nom, "email": update.email, "actif": update.actif, "mois_debut": update.mois_debut}
     
     if update.password:
         update_data["password"] = hash_password(update.password)
