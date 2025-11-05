@@ -73,6 +73,10 @@ agenthub/agents/youtube/db
 *.deb
 *.dylib
 
+# Deployment archives (except for tracking)
+/deployment/*.zip
+/deployment/INSTRUCTIONS_DEPLOIEMENT.txt
+
 # Build caches
 .cache/
 
