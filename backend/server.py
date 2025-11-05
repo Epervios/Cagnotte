@@ -63,6 +63,7 @@ class PaiementBase(BaseModel):
     montant: float
     methode: str  # TWINT, VIREMENT, AUTRE, DEPENSE
     raison: Optional[str] = None
+    notes_admin: Optional[str] = None
 
 class PaiementCreate(PaiementBase):
     pass
