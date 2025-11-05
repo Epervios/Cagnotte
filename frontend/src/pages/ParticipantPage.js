@@ -317,6 +317,90 @@ function ParticipantPage() {
           </Card>
         </div>
 
+        {/* Monthly Timeline */}
+        <Card className="mb-8">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle>Vue mensuelle {timelineYear}</CardTitle>
+                <CardDescription>Statut de vos paiements par mois</CardDescription>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setTimelineYear(prev => prev - 1)}
+                  data-testid="timeline-prev-year"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </Button>
+                <span className="text-sm font-medium min-w-[60px] text-center">{timelineYear}</span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setTimelineYear(prev => prev + 1)}
+                  data-testid="timeline-next-year"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-12 gap-2">
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(month => {
+                const monthStatus = getMonthStatus(timelineYear, month);
+                const moisStr = `${timelineYear}-${String(month).padStart(2, '0')}`;
+                const paiement = paiements.find(p => p.mois === moisStr);
+                const monthName = new Date(timelineYear, month - 1).toLocaleString('fr-FR', { month: 'short' });
+                
+                return (
+                  <div
+                    key={month}
+                    className="relative group"
+                    data-testid={`timeline-month-${month}`}
+                  >
+                    <div
+                      className={`${monthStatus.color} rounded-lg p-3 flex flex-col items-center justify-center cursor-pointer transition-all hover:scale-105 hover:shadow-lg`}
+                      title={`${monthName} - ${monthStatus.label}${paiement ? ` (${paiement.montant.toFixed(2)} ${config.devise})` : ''}`}
+                    >
+                      <span className="text-white text-xs font-bold uppercase">{monthName}</span>
+                      {paiement && (
+                        <span className="text-white text-xs mt-1">{paiement.montant.toFixed(0)}</span>
+                      )}
+                    </div>
+                    {/* Tooltip on hover */}
+                    <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
+                      {monthStatus.label}
+                      {paiement && ` - ${paiement.montant.toFixed(2)} ${config.devise}`}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            
+            {/* Legend */}
+            <div className="flex flex-wrap gap-4 mt-6 justify-center text-sm">
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 bg-green-500 rounded"></div>
+                <span>Confirmé</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 bg-yellow-500 rounded"></div>
+                <span>En attente</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 bg-red-500 rounded"></div>
+                <span>Manquant</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 bg-gray-200 rounded"></div>
+                <span>Futur</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Declare Payment Form */}
         <Card className="mb-8">
           <CardHeader>
