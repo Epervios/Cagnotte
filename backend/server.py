@@ -80,6 +80,7 @@ class PaiementUpdate(BaseModel):
     methode: Optional[str] = None
     statut: Optional[str] = None
     raison: Optional[str] = None
+    notes_admin: Optional[str] = None
 
 class ConfigItem(BaseModel):
     model_config = ConfigDict(extra="ignore")
