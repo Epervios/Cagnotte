@@ -233,6 +233,38 @@ function AdminPage() {
     }
   };
 
+  const handleExportPDF = async () => {
+    try {
+      const moisActuel = new Date().toISOString().slice(0, 7);
+      
+      // Get data
+      const [kpisRes] = await Promise.all([
+        axios.get(`${API}/kpi/admin`)
+      ]);
+      
+      const pdfData = {
+        month: moisActuel,
+        devise: config.devise || 'CHF',
+        totalConfirme: kpisRes.data.reduce((sum, k) => sum + k.confirme_annee, 0),
+        totalEnAttente: kpisRes.data.reduce((sum, k) => sum + k.en_attente, 0),
+        onTimeCount: kpisRes.data.filter(k => !k.en_retard).length,
+        totalParticipants: kpisRes.data.length,
+        ponctualityRate: (kpisRes.data.filter(k => !k.en_retard).length / kpisRes.data.length) * 100,
+        participants: kpisRes.data.map(k => ({
+          nom: k.nom,
+          confirme: k.confirme_annee,
+          enAttente: k.en_attente,
+          enRetard: k.en_retard
+        }))
+      };
+      
+      exportMonthlyReportPDF(pdfData);
+      toast.success('PDF généré avec succès');
+    } catch (error) {
+      toast.error('Erreur lors de la génération du PDF');
+    }
+  };
+
   const handleCreateDepense = async (e) => {
     e.preventDefault();
     
