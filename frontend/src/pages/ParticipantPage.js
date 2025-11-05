@@ -446,7 +446,11 @@ function ParticipantPage() {
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-4 h-4 bg-red-500 rounded"></div>
-                <span>Manquant</span>
+                <span>En retard</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 bg-gray-700 rounded"></div>
+                <span>Pas cotisé</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-4 h-4 bg-gray-200 rounded"></div>
