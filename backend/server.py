@@ -487,6 +487,29 @@ async def export_csv_participant(participant_id: str, user: Dict[str, Any] = Dep
     
     return {"csv": "\n".join(csv_lines)}
 
+@api_router.get("/export/csv-all")
+async def export_csv_all(_: Dict[str, Any] = Depends(require_admin)):
+    # Get all participants
+    participants_dict = {}
+    participants = await db.participants.find({}, {"_id": 0}).to_list(1000)
+    for p in participants:
+        participants_dict[p['id']] = p['nom']
+    
+    # Get all paiements
+    paiements = await db.paiements.find({}, {"_id": 0}).to_list(10000)
+    
+    # Sort by date
+    paiements_sorted = sorted(paiements, key=lambda x: (x['mois'], x['date']))
+    
+    # Generate CSV
+    csv_lines = ["Participant,Mois,Montant,Méthode,Statut,Date,Raison"]
+    for p in paiements_sorted:
+        participant_nom = participants_dict.get(p['participant_id'], 'Inconnu')
+        raison = p.get('raison', '').replace(',', ';') if p.get('raison') else ''
+        csv_lines.append(f"{participant_nom},{p['mois']},{p['montant']},{p['methode']},{p['statut']},{p['date']},{raison}")
+    
+    return {"csv": "\n".join(csv_lines)}
+
 # Include the router
 app.include_router(api_router)
 
