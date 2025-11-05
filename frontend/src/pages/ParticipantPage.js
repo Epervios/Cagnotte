@@ -186,7 +186,7 @@ function ParticipantPage() {
             <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">Cagnotte Cadre SIC</h1>
             <p className="text-gray-600 mt-1">Bienvenue, {user.nom}</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             {isAdmin && (
               <Button
                 onClick={() => navigate('/admin')}
@@ -198,6 +198,56 @@ function ParticipantPage() {
                 Vue Admin
               </Button>
             )}
+            <Dialog open={showChangePassword} onOpenChange={setShowChangePassword}>
+              <DialogTrigger asChild>
+                <Button variant="outline" data-testid="participant-change-password-button">
+                  <Key className="w-4 h-4 mr-2" />
+                  Mot de passe
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Modifier le mot de passe</DialogTitle>
+                  <DialogDescription>Changez votre mot de passe</DialogDescription>
+                </DialogHeader>
+                <form onSubmit={handleChangePassword} className="space-y-4">
+                  <div>
+                    <Label htmlFor="current_password">Mot de passe actuel</Label>
+                    <Input
+                      id="current_password"
+                      type="password"
+                      value={passwordForm.current_password}
+                      onChange={(e) => setPasswordForm(prev => ({ ...prev, current_password: e.target.value }))}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="new_password">Nouveau mot de passe</Label>
+                    <Input
+                      id="new_password"
+                      type="password"
+                      value={passwordForm.new_password}
+                      onChange={(e) => setPasswordForm(prev => ({ ...prev, new_password: e.target.value }))}
+                      required
+                      minLength={6}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="confirm_password">Confirmer</Label>
+                    <Input
+                      id="confirm_password"
+                      type="password"
+                      value={passwordForm.confirm_password}
+                      onChange={(e) => setPasswordForm(prev => ({ ...prev, confirm_password: e.target.value }))}
+                      required
+                    />
+                  </div>
+                  <Button type="submit" className="w-full bg-emerald-700 hover:bg-emerald-800">
+                    Modifier
+                  </Button>
+                </form>
+              </DialogContent>
+            </Dialog>
             <Button onClick={handleLogout} variant="outline" data-testid="logout-button">
               <LogOut className="w-4 h-4 mr-2" />
               Déconnexion
