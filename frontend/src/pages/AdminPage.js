@@ -977,6 +977,13 @@ function AdminPage() {
                             )}
                           </td>
                           <td>{p.raison || '-'}</td>
+                          <td>
+                            {p.notes_admin ? (
+                              <span className="text-xs text-gray-600" title={p.notes_admin}>
+                                📝 {p.notes_admin.substring(0, 20)}{p.notes_admin.length > 20 ? '...' : ''}
+                              </span>
+                            ) : '-'}
+                          </td>
                           <td className="flex gap-1">
                             <Button
                               size="sm"
