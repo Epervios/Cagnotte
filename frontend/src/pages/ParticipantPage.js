@@ -45,6 +45,13 @@ function ParticipantPage() {
     loadData();
   }, []);
 
+  // Update montant when config changes
+  useEffect(() => {
+    if (config.montant_mensuel && !montant) {
+      setMontant(config.montant_mensuel);
+    }
+  }, [config]);
+
   const loadData = async () => {
     try {
       const [kpiRes, paiementsRes, configRes] = await Promise.all([
