@@ -50,23 +50,25 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <Toaster position="top-right" />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={
-            isAuthenticated ? <Navigate to="/participant" /> : <LoginPage setAuth={setIsAuthenticated} />
-          } />
-          <Route path="/participant" element={
-            isAuthenticated ? <ParticipantPage /> : <Navigate to="/login" />
-          } />
-          <Route path="/admin" element={
-            isAuthenticated ? <AdminPage /> : <Navigate to="/login" />
-          } />
-          <Route path="/" element={<Navigate to={isAuthenticated ? "/participant" : "/login"} />} />
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <ThemeProvider>
+      <div className="App">
+        <Toaster position="top-right" />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={
+              isAuthenticated ? <Navigate to="/participant" /> : <LoginPage setAuth={setIsAuthenticated} />
+            } />
+            <Route path="/participant" element={
+              isAuthenticated ? <ParticipantPage /> : <Navigate to="/login" />
+            } />
+            <Route path="/admin" element={
+              isAuthenticated ? <AdminPage /> : <Navigate to="/login" />
+            } />
+            <Route path="/" element={<Navigate to={isAuthenticated ? "/participant" : "/login"} />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
+    </ThemeProvider>
   );
 }
 
