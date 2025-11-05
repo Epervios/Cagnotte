@@ -107,6 +107,25 @@ function AdminPage() {
     }
   };
 
+  const handleEditParticipant = async (e) => {
+    e.preventDefault();
+    
+    try {
+      await axios.put(`${API}/participants/${editingParticipant.id}`, {
+        nom: editingParticipant.nom,
+        email: editingParticipant.email,
+        actif: editingParticipant.actif,
+        mois_debut: editingParticipant.mois_debut
+      });
+      
+      toast.success('Participant mis à jour');
+      setEditingParticipant(null);
+      loadData();
+    } catch (error) {
+      toast.error(error.response?.data?.detail || 'Erreur lors de la modification');
+    }
+  };
+
   const handleChangePassword = async (e) => {
     e.preventDefault();
     
