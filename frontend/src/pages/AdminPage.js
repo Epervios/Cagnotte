@@ -252,7 +252,7 @@ function AdminPage() {
       }
     }
     if (filterYear && !p.mois.startsWith(filterYear)) return false;
-    if (filterMonth && p.mois !== filterMonth) return false;
+    if (filterMonth && filterMonth !== 'ALL' && p.mois !== filterMonth) return false;
     return true;
   });
 
