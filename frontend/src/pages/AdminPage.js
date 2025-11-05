@@ -348,7 +348,7 @@ function AdminPage() {
                 <Button
                   onClick={handleConfirmMonth}
                   className="w-full bg-emerald-700 hover:bg-emerald-800"
-                  disabled={!filterMonth}
+                  disabled={!filterMonth || filterMonth === 'ALL'}
                   data-testid="confirm-month-button"
                 >
                   <CheckCircle className="w-4 h-4 mr-2" />
