@@ -409,14 +409,9 @@ function ParticipantPage() {
                 const paiement = paiements.find(p => p.mois === moisStr);
                 const monthName = new Date(timelineYear, month - 1).toLocaleString('fr-FR', { month: 'short' });
                 
+                // Ne pas afficher les mois avant le début
                 if (monthStatus.hidden) {
-                  return (
-                    <div key={month} className="relative opacity-30">
-                      <div className={`${monthStatus.color} rounded-lg p-3 flex flex-col items-center justify-center`}>
-                        <span className="text-gray-400 text-xs font-bold uppercase">{monthName}</span>
-                      </div>
-                    </div>
-                  );
+                  return null;
                 }
                 
                 return (
