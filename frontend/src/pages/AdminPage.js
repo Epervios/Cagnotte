@@ -399,6 +399,14 @@ function AdminPage() {
           </div>
           <div className="flex gap-2">
             <Button
+              variant="outline"
+              size="icon"
+              onClick={toggleTheme}
+              title={theme === 'dark' ? 'Mode clair' : 'Mode sombre'}
+            >
+              {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </Button>
+            <Button
               onClick={() => navigate('/participant')}
               variant="outline"
               className="border-emerald-600 text-emerald-600 hover:bg-emerald-50 relative z-10"
