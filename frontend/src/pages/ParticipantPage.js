@@ -199,6 +199,12 @@ function ParticipantPage() {
     const now = new Date();
     const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
     
+    // Check if before user's start month
+    const userMoisDebut = user?.mois_debut || `${year}-01`;
+    if (moisStr < userMoisDebut) {
+      return { status: 'not_started', color: 'bg-gray-100', label: 'Non concerné', hidden: true };
+    }
+    
     const paiement = paiements.find(p => p.mois === moisStr);
     
     if (moisStr > currentMonth) {
