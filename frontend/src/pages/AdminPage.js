@@ -791,8 +791,16 @@ function AdminPage() {
         {/* Paiements Table */}
         <Card>
           <CardHeader>
-            <CardTitle>Tous les Paiements</CardTitle>
-            <CardDescription>{filteredPaiements.length} paiement(s)</CardDescription>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div>
+                <CardTitle>Tous les Paiements</CardTitle>
+                <CardDescription>{filteredPaiements.length} paiement(s)</CardDescription>
+              </div>
+              <Button onClick={handleExportAllCSV} variant="outline" size="sm" data-testid="export-all-csv-button">
+                <Download className="w-4 h-4 mr-2" />
+                Exporter tout (CSV)
+              </Button>
+            </div>
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">
