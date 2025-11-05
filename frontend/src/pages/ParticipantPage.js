@@ -26,7 +26,7 @@ function ParticipantPage() {
   
   // Filters
   const [filterYear, setFilterYear] = useState(new Date().getFullYear().toString());
-  const [hideF future, setHideFuture] = useState(false);
+  const [hideFuture, setHideFuture] = useState(false);
   
   const navigate = useNavigate();
 
