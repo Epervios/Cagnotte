@@ -447,6 +447,18 @@ function AdminPage() {
                         data-testid="new-participant-password-input"
                       />
                     </div>
+                    <div>
+                      <Label htmlFor="mois_debut">Mois de début (optionnel)</Label>
+                      <Input
+                        id="mois_debut"
+                        type="month"
+                        value={newParticipant.mois_debut}
+                        onChange={(e) => setNewParticipant(prev => ({ ...prev, mois_debut: e.target.value }))}
+                        placeholder="YYYY-MM"
+                        data-testid="new-participant-mois-debut-input"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">Si vide, mois courant par défaut</p>
+                    </div>
                     <Button type="submit" className="w-full" disabled={loading} data-testid="submit-new-participant-button">
                       {loading ? 'Ajout...' : 'Ajouter'}
                     </Button>
