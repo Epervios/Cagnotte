@@ -706,6 +706,16 @@ function AdminPage() {
                   </form>
                 </DialogContent>
               </Dialog>
+              
+              <Button 
+                variant="outline" 
+                onClick={handleSendReminders}
+                disabled={loading}
+                data-testid="send-reminders-button"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Envoyer rappels email
+              </Button>
             </div>
           </CardContent>
         </Card>
