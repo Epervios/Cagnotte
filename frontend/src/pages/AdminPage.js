@@ -605,6 +605,60 @@ function AdminPage() {
                   </form>
                 </DialogContent>
               </Dialog>
+              
+              <Dialog open={showChangePassword} onOpenChange={setShowChangePassword}>
+                <DialogTrigger asChild>
+                  <Button variant="outline" data-testid="change-password-button">
+                    <Edit className="w-4 h-4 mr-2" />
+                    Changer mot de passe
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Modifier le mot de passe</DialogTitle>
+                    <DialogDescription>Changez votre mot de passe personnel</DialogDescription>
+                  </DialogHeader>
+                  <form onSubmit={handleChangePassword} className="space-y-4">
+                    <div>
+                      <Label htmlFor="current_password">Mot de passe actuel</Label>
+                      <Input
+                        id="current_password"
+                        type="password"
+                        value={passwordForm.current_password}
+                        onChange={(e) => setPasswordForm(prev => ({ ...prev, current_password: e.target.value }))}
+                        required
+                        data-testid="current-password-input"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="new_password">Nouveau mot de passe</Label>
+                      <Input
+                        id="new_password"
+                        type="password"
+                        value={passwordForm.new_password}
+                        onChange={(e) => setPasswordForm(prev => ({ ...prev, new_password: e.target.value }))}
+                        required
+                        minLength={6}
+                        data-testid="new-password-input"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="confirm_password">Confirmer le mot de passe</Label>
+                      <Input
+                        id="confirm_password"
+                        type="password"
+                        value={passwordForm.confirm_password}
+                        onChange={(e) => setPasswordForm(prev => ({ ...prev, confirm_password: e.target.value }))}
+                        required
+                        data-testid="confirm-password-input"
+                      />
+                    </div>
+                    <Button type="submit" className="w-full" disabled={loading} data-testid="submit-password-button">
+                      {loading ? 'Modification...' : 'Modifier le mot de passe'}
+                    </Button>
+                  </form>
+                </DialogContent>
+              </Dialog>
             </div>
           </CardContent>
         </Card>
