@@ -378,7 +378,7 @@ async def create_depense(depense: DepenseRequest, _: Dict[str, Any] = Depends(re
             "montant": montant,
             "methode": "DEPENSE",
             "raison": depense.raison,
-            "statut": "en_attente",
+            "statut": "confirme",
             "date": datetime.now(timezone.utc).isoformat()
         }
         
