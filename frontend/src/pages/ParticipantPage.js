@@ -29,6 +29,10 @@ function ParticipantPage() {
   const [filterYear, setFilterYear] = useState(new Date().getFullYear().toString());
   const [hideFuture, setHideFuture] = useState(false);
   
+  // Password change
+  const [showChangePassword, setShowChangePassword] = useState(false);
+  const [passwordForm, setPasswordForm] = useState({ current_password: '', new_password: '', confirm_password: '' });
+  
   const navigate = useNavigate();
 
   useEffect(() => {
