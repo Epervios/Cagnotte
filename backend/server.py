@@ -231,7 +231,25 @@ async def update_participant(participant_id: str, update: UserCreate, _: Dict[st
     return User(**updated)
 
 @api_router.delete("/participants/{participant_id}")
-async def delete_participant(participant_id: str, _: Dict[str, Any] = Depends(require_admin)):
+async def delete_participant(participant_id: str, user: Dict[str, Any] = Depends(require_admin)):
+    # Check if trying to delete self
+    if participant_id == user['id']:
+        raise HTTPException(status_code=400, detail="Vous ne pouvez pas vous supprimer vous-même")
+    
+    # Check if it's the last admin
+    participant = await db.participants.find_one({"id": participant_id}, {"_id": 0})
+    if not participant:
+        raise HTTPException(status_code=404, detail="Participant non trouvé")
+    
+    admin_emails_str = os.environ.get('ADMIN_EMAILS', 'eric.savary@lausanne.ch')
+    admin_emails = [e.strip() for e in admin_emails_str.split(',')]
+    
+    if participant['email'] in admin_emails:
+        # Count active admins
+        active_admins = await db.participants.find({"email": {"$in": admin_emails}, "actif": True}).to_list(1000)
+        if len(active_admins) <= 1:
+            raise HTTPException(status_code=400, detail="Impossible de supprimer le dernier administrateur")
+    
     # Soft delete
     await db.participants.update_one({"id": participant_id}, {"$set": {"actif": False}})
     return {"success": True}
