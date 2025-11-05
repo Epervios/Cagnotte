@@ -1,0 +1,97 @@
+╔════════════════════════════════════════════════════════════════╗
+║     INSTRUCTIONS DE DÉPLOIEMENT SUR PLESK                      ║
+╚════════════════════════════════════════════════════════════════╝
+
+📦 Archive: cagnotte-plesk-20251105_230637.zip
+📅 Date: Wed Nov  5 23:06:54 UTC 2025
+
+═══════════════════════════════════════════════════════════════
+
+ÉTAPES D'INSTALLATION:
+
+1. PRÉPARATION
+   - Créez une base de données MySQL dans Plesk
+   - Notez: nom de la BD, utilisateur, mot de passe, hôte
+
+2. TÉLÉCHARGEMENT
+   - Téléchargez l'archive cagnotte-plesk-20251105_230637.zip sur votre ordinateur
+   - Extrayez le contenu de l'archive
+
+3. UPLOAD VIA PLESK
+   - Connectez-vous à Plesk
+   - Allez dans "Fichiers" pour votre domaine
+   - Uploadez TOUT le contenu extrait dans httpdocs/ ou public_html/
+
+4. CONFIGURATION BASE DE DONNÉES
+   - Éditez config/database.php avec vos identifiants MySQL:
+     * DB_HOST (souvent localhost)
+     * DB_NAME (nom de votre base de données)
+     * DB_USER (utilisateur MySQL)
+     * DB_PASS (mot de passe MySQL)
+
+5. CONFIGURATION SÉCURITÉ
+   - Éditez config/config.php:
+     * JWT_SECRET: générez une chaîne aléatoire longue
+     * ADMIN_EMAILS: votre email séparé par des virgules
+
+6. IMPORT DU SCHÉMA
+   - Dans Plesk, allez dans "Bases de données" > "phpMyAdmin"
+   - Sélectionnez votre base de données
+   - Cliquez sur "Importer"
+   - Importez le fichier database/schema.sql
+
+7. CRÉATION DE L'ADMINISTRATEUR
+   - Dans votre navigateur, allez sur: https://votre-domaine.ch/setup.php
+   - Cela créera l'admin avec:
+     Email: eric.savary@lausanne.ch
+     Password: admin123
+   - ⚠️ SUPPRIMEZ setup.php après !
+
+8. CONNEXION
+   - Allez sur https://votre-domaine.ch
+   - Connectez-vous avec les identifiants ci-dessus
+   - CHANGEZ le mot de passe immédiatement !
+
+═══════════════════════════════════════════════════════════════
+
+VÉRIFICATIONS:
+
+✓ Le fichier .htaccess est bien présent à la racine
+✓ HTTPS est activé dans Plesk
+✓ PHP 8.0 ou supérieur est configuré
+✓ Les extensions PHP suivantes sont activées:
+  - mysqli
+  - pdo_mysql
+  - json
+  - mbstring
+
+═══════════════════════════════════════════════════════════════
+
+STRUCTURE ATTENDUE DANS httpdocs/:
+
+httpdocs/
+├── public/
+│   ├── index.html
+│   ├── config.js
+│   └── static/
+├── api/
+├── config/
+├── database/
+├── .htaccess
+├── setup.php
+└── README.md
+
+═══════════════════════════════════════════════════════════════
+
+EN CAS DE PROBLÈME:
+
+1. Vérifiez les logs d'erreur PHP dans Plesk
+2. Assurez-vous que tous les fichiers ont été uploadés
+3. Vérifiez les permissions des fichiers (644 pour les fichiers, 755 pour les dossiers)
+4. Testez les API directement: https://votre-domaine.ch/api/config.php
+
+═══════════════════════════════════════════════════════════════
+
+SUPPORT:
+Pour toute aide, référez-vous au fichier README.md inclus dans l'archive.
+
