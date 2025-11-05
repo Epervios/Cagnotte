@@ -214,6 +214,7 @@ async def create_participant(participant: UserCreate, _: Dict[str, Any] = Depend
         "email": participant.email,
         "password": hashed_pw,
         "actif": participant.actif,
+        "mois_debut": participant.mois_debut or datetime.now(timezone.utc).strftime("%Y-%m"),
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     
