@@ -33,7 +33,7 @@ function LoginPage({ setAuth }) {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4" style={{ background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)' }}>
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient">
       <div className="w-full max-w-md animate-fade-in">
         <div className="card">
           <div className="text-center mb-8">
