@@ -16,6 +16,7 @@ import { exportMonthlyReportPDF } from '../utils/pdfExport';
 import { useTheme } from '../contexts/ThemeContext';
 
 function AdminPage() {
+  const { theme, toggleTheme } = useTheme();
   const [user, setUser] = useState(null);
   const [participants, setParticipants] = useState([]);
   const [paiements, setPaiements] = useState([]);
