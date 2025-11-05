@@ -179,6 +179,21 @@ function AdminPage() {
     }
   };
 
+  const handleExportAllCSV = async () => {
+    try {
+      const response = await axios.get(`${API}/export/csv-all`);
+      const blob = new Blob([response.data.csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `tous_paiements_${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+      toast.success('Export réussi');
+    } catch (error) {
+      toast.error('Erreur lors de l\'export');
+    }
+  };
+
   const handleCreateDepense = async (e) => {
     e.preventDefault();
     
