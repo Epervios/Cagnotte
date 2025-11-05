@@ -23,7 +23,7 @@ function AdminPage() {
   
   // Filters
   const [filterYear, setFilterYear] = useState(new Date().getFullYear().toString());
-  const [filterMonth, setFilterMonth] = useState('');
+  const [filterMonth, setFilterMonth] = useState(undefined);
   const [searchTerm, setSearchTerm] = useState('');
   
   // Dialogs
