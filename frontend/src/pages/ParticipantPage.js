@@ -14,6 +14,7 @@ import { ArrowRight, Download, LogOut, Shield, Key, ChevronLeft, ChevronRight, B
 import { useTheme } from '../contexts/ThemeContext';
 
 function ParticipantPage() {
+  const { theme, toggleTheme } = useTheme();
   const [user, setUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [kpi, setKpi] = useState({ total_confirme_annee: 0, en_attente_annee: 0, reste_mois: 0 });
