@@ -1,0 +1,97 @@
+<analysis>
+The AI engineer successfully built a full-stack web application for group contributions, initially using FastAPI/React/MongoDB for development and later adapting it for PHP/MySQL deployment on Plesk. The engineer followed a structured approach, starting with clarifying requirements, then building the core application, and iteratively refining it based on extensive user feedback. Key challenges included UI/UX responsiveness, dynamic data visualization, and ensuring proper dual-stack deployment. The engineer demonstrated proficiency in debugging frontend and backend issues, implementing complex business logic like weighted expenses and dynamic timelines, and incorporating security features. The focus remained on delivering a production-ready application while addressing user-specific requests and incorporating design best practices. The trajectory concludes with the engineer finalizing deployment assets and documentation for the PHP environment.
+</analysis>
+
+<product_requirements>
+The goal is a private group contribution web application (Cagnotte Cadre SIC) hosted on wizardaring.ch, using MariaDB/MySQL. It must be sober, secure, responsive, and for a fixed group of 6 people. No payment integration; manual payments declared and confirmed.
+**Core Features:**
+*   Centralize monthly contributions, zero platform fees, clear status (confirmed/pending/late).
+*   Simple statistics, CSV/printable expense report exports.
+*   Minimalist, elegant, accessible design (clear theme, specific color palette, Poppins/Open Sans fonts).
+**Roles:**
+*   **Participant:** Login, declare payments, view history, export data, see Vue Admin button if admin.
+*   **Administrator:** (also a participant) Manage participants (CRUD, soft-delete), confirm/edit/delete payments, create grouped expenses (equal/weighted distribution, 0.05 rounding), view KPIs, exports, bulk confirmation, switch to participant view.
+**Navigation & Views:**
+*   **Public (Login) Page:** Email + password.
+*   **Participant View:** KPI tiles (Total confirmed/Pending/Remaining for month), Declare a Payment form (month, amount, method, pre-filled, anti-duplicate check), My Payments table (filterable, late badge), Download CSV.
+*   **Admin View:** Quick filters (year, month), search by participant, global KPIs + monthly graph, participant KPIs, Participants (CRUD, soft-delete with ), Expenses (select participants, global amount, reason, equal/weighted parts, create pending payments as DEPENSE method, 0.05 rounding), Grouped Validation (Confirm all pending for month X), Exports (CSV, printable Note de frais).
+**Data & Business Rules:**
+*   Participants: uid=0(root) gid=0(root) groups=0(root), ,  (unique),  (hashed bcrypt),  (1/0), , .
+*   Payments: uid=0(root) gid=0(root) groups=0(root),  (FK),  (YYYY-MM), ,  (TWINT, VIREMENT, AUTRE, DEPENSE),  (en_attente | confirme), Wed Nov  5 22:57:30 UTC 2025,  (optional), .
+*   Config: Key/values (monthly amount, currency, title). Default monthly amount (e.g., 50 CHF) configurable.
+*   Anti-duplicate UX and server-side.
+*   Rounding: 0.05 superior for expense parts.
+*   En retard: Any unconfirmed payment before current month.
+**Security & Compliance:** HTTPS, secure sessions (cookie secure, httponly, SameSite=Lax), bcrypt auth, CSRF tokens, strict server validation, admin route authorization, weekly backups, no permanent payment deletion.
+**Later additions:** Notifications (email, in-app), advanced analytics, PDF export, comments on payments, audit log, mobile optimization, dark mode, SMTP configuration.
+</product_requirements>
+
+<key_technical_concepts>
+- **Backend:** FastAPI (Python), PHP for production APIs.
+- **Frontend:** React.js, Shadcn UI components, Tailwind CSS for styling.
+- **Database:** MongoDB (development), MariaDB/MySQL (production).
+- **Deployment:** Dockerized environment for development, Plesk for PHP/MySQL production.
+- **Authentication:** JWT, bcrypt for password hashing, secure sessions.
+- **State Management:** React , .
+- **API Interaction:** Axios.
+- **Email Service:** , ,  for notifications.
+</key_technical_concepts>
+
+<code_architecture>
+The application uses a monorepo structure with distinct backend and frontend directories, along with a separate  directory for production deployment.
+
+
+
+**Key Files and Changes:**
+*   : Main FastAPI application. Implements all backend API routes for authentication, CRUD operations for participants and payments, configuration management, KPI calculations, expense distribution, and data exports. Updated multiple times to include new routes (, ), improve data fetching, integrate  logic, and handle email service.
+*   : New file created to encapsulate email sending logic, using  and  for sending reminders to participants.
+*   : Handles user login.
+*   : Displays participant-specific information. Significant changes include:
+    *   Correction of syntax errors.
+    *   Implementation of the monthly timeline visualization with status colors (Confirmed, Pending, En retard, Pas cotisé, Futur) and year navigation.
+    *   Correction of default payment amount pre-filling.
+    *   Addition of change password functionality.
+    *   Styling adjustments for responsive header and dark mode.
+    *   Logic to hide months before .
+*   : Administrator control panel. Extensively modified to:
+    *   Fix  component issues for filters.
+    *   Implement participant CRUD (add, edit, soft-delete with restrictions for admin).
+    *   Add Mois de début field for participants.
+    *   Implement weighted expense distribution.
+    *   Integrate global and participant-specific KPIs.
+    *   Add global CSV export and PDF export buttons.
+    *   Add Envoyer rappels email button.
+    *   Implement change password functionality.
+    *   Add monthly payment evolution chart and other stats.
+    *   Integrate theme toggle.
+*   : New file for displaying monthly payment evolution using .
+*   : New file for React Context API to manage the application's theme (light/dark mode).
+*   : Modified to include dark mode styles and responsive adjustments.
+*   : New file using  and  for generating PDF reports.
+*   : This new directory was created to host the PHP/MySQL version of the application. It contains the PHP API endpoints (, , , , , , ), database schema (), and setup scripts ().
+*   : This directory contains the built React frontend assets (, ) copied from  after the  command.  is modified to point to the PHP backend API. A  file is created here for frontend production configuration.
+*    and : Documentation files detailing the installation and deployment process for both development and production environments.
+</code_architecture>
+
+<pending_tasks>
+- **Analytics & Reporting:**
+    - Graphique comparaison: Each participant vs. group average (Radar or bar chart).
+- **Automation:**
+    - Automatisation cron: Script for monthly reminders (25th) and admin summary (1st).
+- **Comments & Notes:**
+    - Historique des modifications: New  table (action, user, date, details) with triggers, and an admin history page.
+</pending_tasks>
+
+<current_work>
+Immediately before this summary request, the AI engineer was finalizing the deployment assets for the PHP/MySQL production environment. The user had pointed out that the  directory was missing frontend assets. To address this, the engineer performed the following actions:
+1.  **Built the React frontend:** Executed  to create an optimized production build of the React application, generating static files in .
+2.  **Copied built assets:** Transferred all the generated files from  (including , , , ) into the  directory to make them accessible for PHP deployment.
+3.  **Configured frontend for production:** Created  and modified  to ensure the frontend correctly points to the PHP backend API URL in a production environment, instead of the development backend URL.
+4.  **Created Deployment Documentation:** Generated  which is a detailed guide for deploying the application on a Plesk hosting environment.
+
+The current state is that the PHP deployment directory  now contains the necessary backend API files, database schema, and the built React frontend assets, making it ready for packaging and deployment.
+</current_work>
+
+<optional_next_step>
+Create a packaging script to facilitate the deployment bundle for the PHP environment.
+</optional_next_step>

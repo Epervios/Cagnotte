@@ -12,7 +12,7 @@ Cette application existe en **deux versions** :
 ## VERSION PREVIEW (Development)
 
 ### Accès
-- **URL**: https://splitshare-6.preview.emergentagent.com
+- **URL**: https://expenseshare-13.preview.emergentagent.com
 - **Email administrateur**: eric.savary@lausanne.ch
 - **Mot de passe**: admin123
 
@@ -134,8 +134,8 @@ Tous les fichiers de production se trouvent dans le dossier `/app/php/`
 ## Structure des URLs
 
 ### Preview (Development)
-- Frontend : `https://splitshare-6.preview.emergentagent.com/`
-- API : `https://splitshare-6.preview.emergentagent.com/api/`
+- Frontend : `https://expenseshare-13.preview.emergentagent.com/`
+- API : `https://expenseshare-13.preview.emergentagent.com/api/`
 
 ### Production (Plesk)
 - Frontend : `https://votre-domaine.ch/`
