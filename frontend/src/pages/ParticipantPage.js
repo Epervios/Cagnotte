@@ -10,7 +10,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { ArrowRight, Download, LogOut, Shield, Key, ChevronLeft, ChevronRight, Bell } from 'lucide-react';
+import { ArrowRight, Download, LogOut, Shield, Key, ChevronLeft, ChevronRight, Bell, Moon, Sun } from 'lucide-react';
+import { useTheme } from '../contexts/ThemeContext';
 
 function ParticipantPage() {
   const [user, setUser] = useState(null);
