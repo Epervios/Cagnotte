@@ -11,7 +11,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Checkbox } from '@/components/ui/checkbox';
-import { User, LogOut, Plus, Edit, Trash2, CheckCircle, Download, BarChart3 } from 'lucide-react';
+import { User, LogOut, Plus, Edit, Trash2, CheckCircle, Download, BarChart3, FileText } from 'lucide-react';
+import { exportMonthlyReportPDF } from '../utils/pdfExport';
 
 function AdminPage() {
   const [user, setUser] = useState(null);
