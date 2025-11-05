@@ -214,6 +214,23 @@ function AdminPage() {
     }
   };
 
+  const handleSendReminders = async () => {
+    if (!window.confirm('Envoyer un email de rappel à tous les participants avec un paiement manquant pour le mois en cours ?')) return;
+    
+    setLoading(true);
+    try {
+      const response = await axios.post(`${API}/notifications/send-reminders`);
+      toast.success(`${response.data.sent} email(s) envoyé(s)`);
+      if (response.data.errors.length > 0) {
+        toast.error(`Erreurs pour: ${response.data.errors.join(', ')}`);
+      }
+    } catch (error) {
+      toast.error('Erreur lors de l\'envoi des rappels');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleCreateDepense = async (e) => {
     e.preventDefault();
     
