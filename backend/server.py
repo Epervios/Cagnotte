@@ -480,6 +480,75 @@ async def get_admin_kpi(_: Dict[str, Any] = Depends(require_admin)):
     
     return kpis
 
+@api_router.get("/kpi/dashboard")
+async def get_dashboard_stats(_: Dict[str, Any] = Depends(require_admin)):
+    """Get advanced dashboard statistics"""
+    config_montant = await db.config.find_one({"key": "montant_mensuel"})
+    montant_mensuel = float(config_montant['value']) if config_montant else 50.0
+    
+    annee_actuelle = datetime.now(timezone.utc).year
+    participants = await db.participants.find({"actif": True}, {"_id": 0}).to_list(1000)
+    
+    # Monthly evolution (last 12 months)
+    monthly_data = []
+    for i in range(11, -1, -1):
+        month_date = datetime.now(timezone.utc).replace(day=1)
+        for _ in range(i):
+            month_date = month_date.replace(day=1) - __import__('datetime').timedelta(days=1)
+            month_date = month_date.replace(day=1)
+        
+        mois_str = month_date.strftime("%Y-%m")
+        total = 0
+        
+        paiements_mois = await db.paiements.find({
+            "mois": mois_str,
+            "statut": "confirme"
+        }, {"_id": 0}).to_list(1000)
+        
+        total = sum(p['montant'] for p in paiements_mois)
+        monthly_data.append({
+            "month": mois_str,
+            "total": total
+        })
+    
+    # Calculate stats
+    all_paiements = await db.paiements.find({"mois": {"$regex": f"^{annee_actuelle}"}}, {"_id": 0}).to_list(10000)
+    
+    total_participants = len(participants)
+    on_time_count = 0
+    
+    for participant in participants:
+        participant_paiements = [p for p in all_paiements if p['participant_id'] == participant['id']]
+        mois_debut = participant.get('mois_debut', f"{annee_actuelle}-01")
+        mois_debut_year, mois_debut_month = map(int, mois_debut.split('-'))
+        
+        start_month = mois_debut_month if mois_debut_year == annee_actuelle else 1
+        mois_actuel_num = datetime.now(timezone.utc).month
+        
+        is_on_time = True
+        for mois_num in range(start_month, mois_actuel_num):
+            mois_str = f"{annee_actuelle}-{mois_num:02d}"
+            paiement_mois = next((p for p in participant_paiements if p['mois'] == mois_str), None)
+            if not paiement_mois or paiement_mois['statut'] != 'confirme':
+                is_on_time = False
+                break
+        
+        if is_on_time:
+            on_time_count += 1
+    
+    ponctuality_rate = (on_time_count / total_participants * 100) if total_participants > 0 else 0
+    
+    confirmes = [p for p in all_paiements if p['statut'] == 'confirme']
+    moyenne_par_participant = sum(p['montant'] for p in confirmes) / total_participants if total_participants > 0 else 0
+    
+    return {
+        "monthly_evolution": monthly_data,
+        "ponctuality_rate": ponctuality_rate,
+        "average_per_participant": moyenne_par_participant,
+        "total_participants": total_participants,
+        "on_time_count": on_time_count
+    }
+
 # ============ EXPORT ROUTES ============
 
 @api_router.get("/export/csv/{participant_id}")
