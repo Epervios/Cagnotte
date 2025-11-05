@@ -525,6 +525,117 @@ async def export_csv_all(_: Dict[str, Any] = Depends(require_admin)):
     
     return {"csv": "\n".join(csv_lines)}
 
+# ============ NOTIFICATION ROUTES ============
+
+@api_router.post("/notifications/send-reminders")
+async def send_reminders(_: Dict[str, Any] = Depends(require_admin)):
+    """Send payment reminders to participants with missing payments"""
+    # Get config
+    config_montant = await db.config.find_one({"key": "montant_mensuel"})
+    montant_mensuel = float(config_montant['value']) if config_montant else 50.0
+    config_devise = await db.config.find_one({"key": "devise"})
+    devise = config_devise['value'] if config_devise else 'CHF'
+    
+    mois_actuel = datetime.now(timezone.utc).strftime("%Y-%m")
+    participants = await db.participants.find({"actif": True}, {"_id": 0}).to_list(1000)
+    
+    sent_count = 0
+    errors = []
+    
+    for participant in participants:
+        # Check if payment exists for current month
+        paiement = await db.paiements.find_one({
+            "participant_id": participant['id'],
+            "mois": mois_actuel
+        })
+        
+        # Check if participant should have paid (mois_debut check)
+        mois_debut = participant.get('mois_debut', '2000-01')
+        if mois_debut > mois_actuel:
+            continue  # Not started yet
+        
+        if not paiement:
+            # Send reminder
+            success = send_payment_reminder(
+                participant['nom'],
+                participant['email'],
+                mois_actuel,
+                montant_mensuel,
+                devise
+            )
+            if success:
+                sent_count += 1
+            else:
+                errors.append(participant['email'])
+    
+    return {
+        "success": True,
+        "sent": sent_count,
+        "errors": errors
+    }
+
+@api_router.post("/notifications/send-admin-summary")
+async def send_admin_summary(user: Dict[str, Any] = Depends(require_admin)):
+    """Send monthly summary to admin"""
+    # Get all KPIs
+    config_montant = await db.config.find_one({"key": "montant_mensuel"})
+    montant_mensuel = float(config_montant['value']) if config_montant else 50.0
+    
+    annee_actuelle = datetime.now(timezone.utc).year
+    mois_actuel_num = datetime.now(timezone.utc).month
+    
+    participants = await db.participants.find({"actif": True}, {"_id": 0}).to_list(1000)
+    
+    total_confirme = 0
+    total_en_attente = 0
+    nb_retards = 0
+    details_html = ""
+    
+    for participant in participants:
+        paiements = await db.paiements.find({
+            "participant_id": participant['id'],
+            "mois": {"$regex": f"^{annee_actuelle}"}
+        }, {"_id": 0}).to_list(1000)
+        
+        confirme = sum(p['montant'] for p in paiements if p['statut'] == 'confirme')
+        en_attente = sum(p['montant'] for p in paiements if p['statut'] == 'en_attente')
+        
+        total_confirme += confirme
+        total_en_attente += en_attente
+        
+        # Check retard
+        mois_debut = participant.get('mois_debut', f"{annee_actuelle}-01")
+        mois_debut_year, mois_debut_month = map(int, mois_debut.split('-'))
+        start_month = mois_debut_month if mois_debut_year == annee_actuelle else 1
+        
+        en_retard = False
+        for mois_num in range(start_month, mois_actuel_num):
+            mois_str = f"{annee_actuelle}-{mois_num:02d}"
+            paiement_mois = next((p for p in paiements if p['mois'] == mois_str), None)
+            if not paiement_mois or paiement_mois['statut'] != 'confirme':
+                en_retard = True
+                break
+        
+        if en_retard:
+            nb_retards += 1
+        
+        statut_badge = "✅ À jour" if not en_retard else "⚠️ En retard"
+        details_html += f"<tr><td>{participant['nom']}</td><td>{statut_badge}</td></tr>"
+    
+    stats = {
+        'total_confirme': total_confirme,
+        'total_en_attente': total_en_attente,
+        'nb_retards': nb_retards,
+        'details_html': details_html
+    }
+    
+    success = send_admin_monthly_summary(user['email'], stats)
+    
+    return {
+        "success": success,
+        "message": "Résumé envoyé" if success else "Erreur lors de l'envoi"
+    }
+
 # Include the router
 app.include_router(api_router)
 
