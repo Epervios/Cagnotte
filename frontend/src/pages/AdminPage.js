@@ -949,6 +949,7 @@ function AdminPage() {
                     <th>Méthode</th>
                     <th>Statut</th>
                     <th>Raison</th>
+                    <th>Notes</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
