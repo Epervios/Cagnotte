@@ -1,0 +1,22 @@
+# Configuration pour le dossier public (frontend React)
+
+# Active la réécriture
+RewriteEngine On
+
+# Permet l'accès aux fichiers statiques (CSS, JS, images)
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Redirige toutes les autres requêtes vers index.html (SPA)
+RewriteRule ^ index.html [L]
+
+# Cache pour les assets statiques
+<FilesMatch "\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$">
+    Header set Cache-Control "max-age=31536000, public"
+</FilesMatch>
+
+# Pas de cache pour index.html et config.js
+<FilesMatch "\.(html|js)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+</FilesMatch>
