@@ -160,7 +160,8 @@ function AdminPage() {
       await axios.put(`${API}/paiements/${editingPaiement.id}`, {
         montant: parseFloat(editingPaiement.montant),
         methode: editingPaiement.methode,
-        statut: editingPaiement.statut
+        statut: editingPaiement.statut,
+        notes_admin: editingPaiement.notes_admin
       });
       toast.success('Paiement mis à jour');
       setEditingPaiement(null);
