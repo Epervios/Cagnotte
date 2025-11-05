@@ -402,7 +402,7 @@ function ParticipantPage() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-12 gap-2">
+            <div className="grid grid-cols-12 gap-2 md:gap-2 overflow-x-auto pb-2">
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(month => {
                 const monthStatus = getMonthStatus(timelineYear, month);
                 const moisStr = `${timelineYear}-${String(month).padStart(2, '0')}`;
