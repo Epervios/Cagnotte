@@ -80,6 +80,16 @@ function ParticipantPage() {
       });
       setConfig(configObj);
       setMontant(configObj.montant_mensuel || '50');
+      
+      // Check for notifications (paiements en attente or reste du mois > 0)
+      const notifs = [];
+      if (kpiRes.data.en_attente_annee > 0) {
+        notifs.push(`${kpiRes.data.en_attente_annee.toFixed(2)} ${configObj.devise} en attente de confirmation`);
+      }
+      if (kpiRes.data.reste_mois > 0) {
+        notifs.push(`${kpiRes.data.reste_mois.toFixed(2)} ${configObj.devise} reste à payer ce mois`);
+      }
+      setNotifications(notifs);
     } catch (error) {
       toast.error('Erreur de chargement');
     }
