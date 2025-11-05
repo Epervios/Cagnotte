@@ -491,14 +491,19 @@ async def get_dashboard_stats(_: Dict[str, Any] = Depends(require_admin)):
     
     # Monthly evolution (last 12 months)
     monthly_data = []
+    from datetime import timedelta
+    
     for i in range(11, -1, -1):
-        month_date = datetime.now(timezone.utc).replace(day=1)
-        for _ in range(i):
-            month_date = month_date.replace(day=1) - __import__('datetime').timedelta(days=1)
-            month_date = month_date.replace(day=1)
+        current_date = datetime.now(timezone.utc)
+        # Go back i months
+        target_month = current_date.month - i
+        target_year = current_date.year
         
-        mois_str = month_date.strftime("%Y-%m")
-        total = 0
+        while target_month <= 0:
+            target_month += 12
+            target_year -= 1
+        
+        mois_str = f"{target_year}-{target_month:02d}"
         
         paiements_mois = await db.paiements.find({
             "mois": mois_str,
