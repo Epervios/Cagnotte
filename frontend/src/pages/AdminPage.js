@@ -30,6 +30,7 @@ function AdminPage() {
   const [showAddParticipant, setShowAddParticipant] = useState(false);
   const [showDepense, setShowDepense] = useState(false);
   const [showEditConfig, setShowEditConfig] = useState(false);
+  const [editingParticipant, setEditingParticipant] = useState(null);
   
   // Forms
   const [newParticipant, setNewParticipant] = useState({ nom: '', email: '', password: '', mois_debut: '' });
