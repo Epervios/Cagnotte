@@ -809,27 +809,42 @@ function AdminPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {participants.map(p => (
-                    <tr key={p.id} data-testid={`participant-row-${p.id}`}>
-                      <td>{p.nom}</td>
-                      <td>{p.email}</td>
-                      <td>{p.mois_debut || '-'}</td>
-                      <td>
-                        <Badge className={p.actif ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}>
-                          {p.actif ? 'Actif' : 'Inactif'}
-                        </Badge>
-                      </td>
-                      <td>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => handleDeleteParticipant(p.id)}
-                          data-testid={`delete-participant-${p.id}`}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </td>
-                    </tr>
+                  {participants.map(p => {
+                    const isAdmin = (process.env.REACT_APP_ADMIN_EMAILS || 'eric.savary@lausanne.ch').split(',').map(e => e.trim()).includes(p.email);
+                    return (
+                      <tr key={p.id} data-testid={`participant-row-${p.id}`}>
+                        <td>{p.nom}</td>
+                        <td>{p.email}</td>
+                        <td>{p.mois_debut || '-'}</td>
+                        <td>
+                          <Badge className={p.actif ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}>
+                            {p.actif ? 'Actif' : 'Inactif'}
+                          </Badge>
+                          {isAdmin && <Badge className="ml-2 bg-blue-100 text-blue-800">Admin</Badge>}
+                        </td>
+                        <td className="flex gap-1">
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => setEditingParticipant(p)}
+                            data-testid={`edit-participant-${p.id}`}
+                          >
+                            <Edit className="w-4 h-4" />
+                          </Button>
+                          {!isAdmin && (
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => handleDeleteParticipant(p.id)}
+                              data-testid={`delete-participant-${p.id}`}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
                   ))}
                 </tbody>
               </table>
