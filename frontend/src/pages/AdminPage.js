@@ -852,6 +852,51 @@ function AdminPage() {
           </CardContent>
         </Card>
 
+        {/* Edit Participant Dialog */}
+        {editingParticipant && (
+          <Dialog open={!!editingParticipant} onOpenChange={() => setEditingParticipant(null)}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Modifier Participant</DialogTitle>
+                <DialogDescription>Modifiez les informations du participant</DialogDescription>
+              </DialogHeader>
+              <form onSubmit={handleEditParticipant} className="space-y-4">
+                <div>
+                  <Label htmlFor="edit-nom">Nom</Label>
+                  <Input
+                    id="edit-nom"
+                    value={editingParticipant.nom}
+                    onChange={(e) => setEditingParticipant(prev => ({ ...prev, nom: e.target.value }))}
+                    required
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="edit-email">Email</Label>
+                  <Input
+                    id="edit-email"
+                    type="email"
+                    value={editingParticipant.email}
+                    onChange={(e) => setEditingParticipant(prev => ({ ...prev, email: e.target.value }))}
+                    required
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="edit-mois-debut">Mois de début</Label>
+                  <Input
+                    id="edit-mois-debut"
+                    type="month"
+                    value={editingParticipant.mois_debut || ''}
+                    onChange={(e) => setEditingParticipant(prev => ({ ...prev, mois_debut: e.target.value }))}
+                  />
+                </div>
+                <Button type="submit" className="w-full">
+                  Enregistrer
+                </Button>
+              </form>
+            </DialogContent>
+          </Dialog>
+        )}
+
         {/* Paiements Table */}
         <Card>
           <CardHeader>
