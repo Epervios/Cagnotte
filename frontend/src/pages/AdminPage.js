@@ -32,7 +32,7 @@ function AdminPage() {
   const [showEditConfig, setShowEditConfig] = useState(false);
   
   // Forms
-  const [newParticipant, setNewParticipant] = useState({ nom: '', email: '', password: '' });
+  const [newParticipant, setNewParticipant] = useState({ nom: '', email: '', password: '', mois_debut: '' });
   const [depenseForm, setDepenseForm] = useState({
     participants: [],
     montant_total: '',
