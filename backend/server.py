@@ -38,6 +38,7 @@ class UserBase(BaseModel):
     nom: str
     email: EmailStr
     actif: bool = True
+    mois_debut: Optional[str] = None  # Format YYYY-MM
 
 class UserCreate(UserBase):
     password: Optional[str] = None
