@@ -1063,6 +1063,18 @@ function AdminPage() {
                     </SelectContent>
                   </Select>
                 </div>
+                <div>
+                  <Label htmlFor="edit-notes">Notes Admin (optionnel)</Label>
+                  <textarea
+                    id="edit-notes"
+                    className="w-full p-2 border rounded-lg text-sm"
+                    rows="3"
+                    value={editingPaiement.notes_admin || ''}
+                    onChange={(e) => setEditingPaiement(prev => ({ ...prev, notes_admin: e.target.value }))}
+                    placeholder="Ajoutez des notes internes..."
+                    data-testid="edit-paiement-notes-input"
+                  />
+                </div>
                 <Button onClick={handleUpdatePaiement} className="w-full" data-testid="submit-edit-paiement-button">
                   Mettre à jour
                 </Button>
