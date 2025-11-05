@@ -767,6 +767,15 @@ function AdminPage() {
                 <Download className="w-4 h-4 mr-2" />
                 Envoyer rappels email
               </Button>
+              
+              <Button 
+                variant="outline" 
+                onClick={handleExportPDF}
+                data-testid="export-pdf-button"
+              >
+                <FileText className="w-4 h-4 mr-2" />
+                Export PDF
+              </Button>
             </div>
           </CardContent>
         </Card>
