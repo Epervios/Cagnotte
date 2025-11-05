@@ -36,6 +36,9 @@ function ParticipantPage() {
   // Timeline
   const [timelineYear, setTimelineYear] = useState(new Date().getFullYear());
   
+  // Notifications
+  const [notifications, setNotifications] = useState([]);
+  
   const navigate = useNavigate();
 
   useEffect(() => {
