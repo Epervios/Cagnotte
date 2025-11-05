@@ -441,14 +441,26 @@ async def get_admin_kpi(_: Dict[str, Any] = Depends(require_admin)):
         confirme_annee = sum(p['montant'] for p in paiements if p['statut'] == 'confirme')
         en_attente = sum(p['montant'] for p in paiements if p['statut'] == 'en_attente')
         
-        # Calculate expected amount up to current month
-        attendu = montant_mensuel * mois_actuel_num
+        # Get participant start month
+        mois_debut = participant.get('mois_debut', f"{annee_actuelle}-01")
+        mois_debut_year, mois_debut_month = map(int, mois_debut.split('-'))
+        
+        # Calculate expected amount from start month to current month
+        if mois_debut_year == annee_actuelle:
+            start_month = mois_debut_month
+        elif mois_debut_year < annee_actuelle:
+            start_month = 1
+        else:
+            start_month = mois_actuel_num + 1  # Start in future, no expectation yet
+        
+        nb_mois_attendus = max(0, mois_actuel_num - start_month + 1)
+        attendu = montant_mensuel * nb_mois_attendus
         manquant = max(0, attendu - confirme_annee)
         progression = (confirme_annee / attendu * 100) if attendu > 0 else 0
         
-        # Check for retard (any past month without confirmation)
+        # Check for retard (any past month after start without confirmation)
         en_retard = False
-        for mois_num in range(1, mois_actuel_num):
+        for mois_num in range(start_month, mois_actuel_num):
             mois_str = f"{annee_actuelle}-{mois_num:02d}"
             paiement_mois = next((p for p in paiements if p['mois'] == mois_str), None)
             if not paiement_mois or paiement_mois['statut'] != 'confirme':
