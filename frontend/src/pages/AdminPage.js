@@ -41,6 +41,8 @@ function AdminPage() {
     poids: {}
   });
   const [editingPaiement, setEditingPaiement] = useState(null);
+  const [showChangePassword, setShowChangePassword] = useState(false);
+  const [passwordForm, setPasswordForm] = useState({ current_password: '', new_password: '', confirm_password: '' });
   
   const navigate = useNavigate();
 
