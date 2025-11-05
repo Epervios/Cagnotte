@@ -17,8 +17,15 @@ body {
 }
 
 /* Dark Mode */
-.dark body {
+.dark .bg-gradient {
   background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+}
+
+.dark body {
+  color: #e5e7eb;
+}
+
+.dark h1, .dark h2, .dark h3, .dark p {
   color: #e5e7eb;
 }
 
