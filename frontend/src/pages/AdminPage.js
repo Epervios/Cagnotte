@@ -134,8 +134,8 @@ function AdminPage() {
   };
 
   const handleConfirmMonth = async () => {
-    if (!filterMonth) {
-      toast.error('Sélectionnez un mois');
+    if (!filterMonth || filterMonth === 'ALL') {
+      toast.error('Sélectionnez un mois spécifique');
       return;
     }
     
