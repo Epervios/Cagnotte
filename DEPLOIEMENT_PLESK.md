@@ -1,6 +1,26 @@
 # 🚀 Guide de Déploiement sur Plesk (wizardaring.ch)
 
-## 📋 Préparation
+## 📦 Méthode Rapide : Script de Packaging Automatisé
+
+**NOUVEAU** : Utilisez le script automatisé pour créer une archive prête à déployer !
+
+```bash
+# Depuis le dossier /app
+bash scripts/package-php-deployment.sh
+```
+
+Ce script va :
+1. ✅ Builder le frontend React en mode production
+2. ✅ Copier les assets dans `/app/php/public/`
+3. ✅ Créer `config.js` avec la bonne configuration
+4. ✅ Générer une archive ZIP prête pour Plesk
+5. ✅ Créer un fichier d'instructions détaillées
+
+L'archive sera créée dans : `/app/deployment/cagnotte-plesk-YYYYMMDD_HHMMSS.zip`
+
+---
+
+## 📋 Méthode Manuelle : Préparation
 
 ### 1. Fichiers à Uploader
 
@@ -21,9 +41,9 @@ Tous les fichiers se trouvent dans `/app/php/`
 │   └── config.php
 ├── database/               # Base de données
 │   └── schema.sql
-├── public/                 # Frontend (à mettre à la racine)
+├── public/                 # Frontend (déjà buildé)
 │   ├── index.html
-│   ├── config.js          # ⚠️ À MODIFIER
+│   ├── config.js          # Configuration production
 │   └── static/
 │       ├── js/
 │       ├── css/
