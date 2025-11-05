@@ -540,9 +540,7 @@ function ParticipantPage() {
                         <td>{p.montant.toFixed(2)} {config.devise}</td>
                         <td>{p.methode}</td>
                         <td>
-                          {isEnRetard(p) ? (
-                            <Badge variant="destructive" data-testid="badge-retard">En Retard</Badge>
-                          ) : p.statut === 'confirme' ? (
+                          {p.statut === 'confirme' ? (
                             <Badge className="bg-green-100 text-green-800" data-testid="badge-confirme">Confirmé</Badge>
                           ) : (
                             <Badge className="bg-yellow-100 text-yellow-800" data-testid="badge-attente">En Attente</Badge>
