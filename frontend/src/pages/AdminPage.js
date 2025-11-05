@@ -325,7 +325,7 @@ function AdminPage() {
                     <SelectValue placeholder="Tous les mois" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Tous les mois</SelectItem>
+                    <SelectItem value="ALL">Tous les mois</SelectItem>
                     {months.map(month => (
                       <SelectItem key={month} value={month}>{month}</SelectItem>
                     ))}
