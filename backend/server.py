@@ -230,6 +230,32 @@ async def update_participant(participant_id: str, update: UserCreate, _: Dict[st
     updated = await db.participants.find_one({"id": participant_id}, {"_id": 0, "password": 0})
     return User(**updated)
 
+@api_router.put("/participants/{participant_id}/password")
+async def change_password(participant_id: str, data: dict, user: Dict[str, Any] = Depends(get_current_user)):
+    # Users can change their own password, or admin can change any password
+    admin_emails_str = os.environ.get('ADMIN_EMAILS', 'eric.savary@lausanne.ch')
+    admin_emails = [e.strip() for e in admin_emails_str.split(',')]
+    is_admin = user['email'] in admin_emails
+    
+    if participant_id != user['id'] and not is_admin:
+        raise HTTPException(status_code=403, detail="Vous ne pouvez changer que votre propre mot de passe")
+    
+    if not data.get('new_password'):
+        raise HTTPException(status_code=400, detail="Nouveau mot de passe requis")
+    
+    # If changing own password, verify current password
+    if participant_id == user['id'] and not is_admin:
+        if not data.get('current_password'):
+            raise HTTPException(status_code=400, detail="Mot de passe actuel requis")
+        if not verify_password(data['current_password'], user['password']):
+            raise HTTPException(status_code=400, detail="Mot de passe actuel incorrect")
+    
+    # Update password
+    new_hashed = hash_password(data['new_password'])
+    await db.participants.update_one({"id": participant_id}, {"$set": {"password": new_hashed}})
+    
+    return {"success": True, "message": "Mot de passe modifié avec succès"}
+
 @api_router.delete("/participants/{participant_id}")
 async def delete_participant(participant_id: str, user: Dict[str, Any] = Depends(require_admin)):
     # Check if trying to delete self
